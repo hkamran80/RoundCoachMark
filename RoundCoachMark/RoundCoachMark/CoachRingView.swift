@@ -26,13 +26,13 @@ class CoachRingView: UIView, CAAnimationDelegate
     private func animateRing(_ open:Bool)
     {
         guard let ring = ringGeometry else {return}
-        let timing: CAMediaTimingFunction = CAMediaTimingFunction.init(name: kCAMediaTimingFunctionEaseInEaseOut)
+        let timing: CAMediaTimingFunction = CAMediaTimingFunction.init(name: CAMediaTimingFunctionName.easeInEaseOut)
         let end_radius = open ? ring.radius : ring.controlRadius
         let beg_radius = open ? ring.controlRadius : ring.radius
         
         let opening = CABasicAnimation(keyPath: "ringRadius")
         opening.duration = ringPeriod
-        opening.fillMode = kCAFillModeBoth
+        opening.fillMode = CAMediaTimingFillMode.both
         opening.timingFunction = timing
         opening.fromValue = beg_radius
         opening.toValue = end_radius
@@ -47,7 +47,7 @@ class CoachRingView: UIView, CAAnimationDelegate
     private func animateAperture(_ open:Bool)
     {
         guard let ring = ringGeometry else {return}
-        let timing: CAMediaTimingFunction = CAMediaTimingFunction.init(name: kCAMediaTimingFunctionEaseInEaseOut)
+        let timing: CAMediaTimingFunction = CAMediaTimingFunction.init(name: CAMediaTimingFunctionName.easeInEaseOut)
         
         guard open
         else
@@ -61,7 +61,7 @@ class CoachRingView: UIView, CAAnimationDelegate
         pulse.duration = aperturePeriod
         pulse.autoreverses = true
         pulse.repeatCount = Float.infinity
-        pulse.fillMode = kCAFillModeBoth
+        pulse.fillMode = CAMediaTimingFillMode.both
         pulse.timingFunction = timing
         pulse.fromValue = ring.controlRadius
         pulse.toValue = ring.controlRadius + apertureTravel
@@ -75,8 +75,8 @@ class CoachRingView: UIView, CAAnimationDelegate
     private func animateEcho(_ open:Bool)
     {
         guard let ring = ringGeometry else {return}
-        let echo_timing: CAMediaTimingFunction = CAMediaTimingFunction.init(name: kCAMediaTimingFunctionDefault)
-        let opacity_timing: CAMediaTimingFunction = CAMediaTimingFunction.init(name: kCAMediaTimingFunctionLinear)
+        let echo_timing: CAMediaTimingFunction = CAMediaTimingFunction.init(name: CAMediaTimingFunctionName.default)
+        let opacity_timing: CAMediaTimingFunction = CAMediaTimingFunction.init(name: CAMediaTimingFunctionName.linear)
         let duration = aperturePeriod*2
         
         guard open
@@ -90,7 +90,7 @@ class CoachRingView: UIView, CAAnimationDelegate
         let pulse = CABasicAnimation(keyPath: "echo")
         pulse.duration = duration
         pulse.repeatCount = Float.infinity
-        pulse.fillMode = kCAFillModeRemoved
+        pulse.fillMode = CAMediaTimingFillMode.removed
         pulse.timingFunction = echo_timing
         pulse.fromValue = ring.controlRadius
         pulse.toValue = ring.controlRadius + echoTravel
@@ -104,7 +104,7 @@ class CoachRingView: UIView, CAAnimationDelegate
         let opacity = CABasicAnimation(keyPath: "echoOpacity")
         opacity.duration = duration
         opacity.repeatCount = Float.infinity
-        opacity.fillMode = kCAFillModeRemoved
+        opacity.fillMode = CAMediaTimingFillMode.removed
         opacity.timingFunction = opacity_timing
         opacity.fromValue = echoBeginOpacity
         opacity.toValue = echoEndOpacity
@@ -175,7 +175,7 @@ class CMRingLayer: CALayer
     @NSManaged var echo: CGFloat
     @NSManaged var echoOpacity: CGFloat
     
-    override class func needsDisplay(forKey key: (String!)) -> Bool
+    override class func needsDisplay(forKey key: (String)) -> Bool
     {
         if key == "ringRadius" || 
            key == "aperture"   ||
@@ -184,7 +184,7 @@ class CMRingLayer: CALayer
         else                       {return super.needsDisplay(forKey: key)}
     }
     
-    override func action(forKey event: (String!)) -> (CAAction!)
+    override func action(forKey event: (String)) -> (CAAction)
     {
         if event == "ringRadius"  || 
            event == "aperture"    ||
@@ -195,7 +195,7 @@ class CMRingLayer: CALayer
             animation.fromValue = presentation()?.value(forKey: event)
             return animation
         }
-        return super.action(forKey: event)
+        return super.action(forKey: event)!
     }
     
     override init()
