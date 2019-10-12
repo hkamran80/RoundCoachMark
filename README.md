@@ -112,4 +112,4 @@ To integrate RoundCoachMark into your Xcode project using CocoaPods, specify it 
 
 ## License
 
-**RoundCoachMark** is released under the [MIT License](LICENSE).
+**RoundCoachMark** is released under the [MIT License](/LICENSE).
